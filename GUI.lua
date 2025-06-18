@@ -18,36 +18,42 @@ UICorner.Parent = Frame
 -- GitHub raw base URL
 local githubBase = "https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/"
 
--- Updated function with debug print statements
+-- In-game message function
+local function showMessage(text)
+    local msg = Instance.new("Message", game.CoreGui)
+    msg.Text = text
+    task.delay(3, function() msg:Destroy() end)
+end
+
+-- Updated function with in-game messages
 local function runGitScript(fileName)
     local url = githubBase .. fileName
-    print("🛠 Fetching from:", url)
+    showMessage("📡 Fetching: " .. fileName)
 
     local ok, response = pcall(function()
         return syn and syn.request({
             Url = url,
             Method = "GET"
+        }) or http and http.request and http.request({
+            Url = url,
+            Method = "GET"
         })
     end)
 
-    if not ok then
-        warn("❌ request() error:", response)
+    if not ok or not response then
+        showMessage("❌ Failed to send HTTP request.")
         return
     end
 
-    if response and response.Success then
-        print("✅ Fetched", fileName, "(", #response.Body, "bytes )")
+    if response.Success then
         local success, result = pcall(loadstring(response.Body))
         if success then
-            print("✅ Executed:", fileName)
+            showMessage("✅ Executed: " .. fileName)
         else
-            warn("❌ Script Error in", fileName, ":", result)
+            showMessage("❌ Script error in: " .. fileName)
         end
     else
-        warn("❌ Failed to fetch", fileName)
-        if response then
-            warn("HTTP Status Code:", response.StatusCode or "unknown")
-        end
+        showMessage("❌ Failed to fetch: " .. fileName)
     end
 end
 
