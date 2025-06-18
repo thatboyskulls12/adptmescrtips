@@ -50,3 +50,30 @@ local function createButton(icon, label, yPos, fileName)
     Label.TextColor3 = Color3.fromRGB(230, 230, 230)
     Label.TextSize = 16
     Label.TextXAlignment = Enum.TextXAlignment.Left
+    Label.Text = label .. " (" .. fileName .. ")"
+
+    Button.MouseButton1Click:Connect(function()
+        local url = githubBase .. fileName
+        local response = syn and syn.request and syn.request({
+            Url = url,
+            Method = "GET"
+        })
+
+        if response and response.Success then
+            local content = response.Body
+            local success, result = pcall(loadstring(content))
+            if success then
+                print("✅ Loaded: " .. fileName)
+            else
+                warn("❌ Script Error: " .. result)
+            end
+        else
+            warn("❌ Could not fetch: " .. fileName)
+        end
+    end)
+end
+
+-- Create buttons
+createButton("rbxassetid://6034328871", "Duplicate Pets", 20, "duplicate_pets.lua")
+createButton("rbxassetid://6035067836", "Pet Spawner", 80, "pet_spawner.lua")
+createButton("rbxassetid://6031075938", "Trade Scam", 140, "trade_scam.lua")
