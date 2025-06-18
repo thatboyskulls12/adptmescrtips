@@ -1,47 +1,96 @@
--- Create GUI
+-- GUI Setup
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local UICorner = Instance.new("UICorner")
-ScreenGui.Parent = game:GetService("CoreGui")
-ScreenGui.Name = "MultiScriptLoader"
 
--- Frame settings
+ScreenGui.Parent = game:GetService("CoreGui")
+ScreenGui.Name = "GitHubScriptLoader"
+
 Frame.Parent = ScreenGui
-Frame.Size = UDim2.new(0, 300, 0, 220)
-Frame.Position = UDim2.new(0.5, -150, 0.5, -110)
-Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Frame.Size = UDim2.new(0, 340, 0, 270)
+Frame.Position = UDim2.new(0.5, -170, 0.5, -135)
+Frame.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
 Frame.Active = true
 Frame.Draggable = true
 
 UICorner.Parent = Frame
 
--- Helper function to create buttons
-local function createButton(text, yPos, fileName)
+-- GitHub raw base URL
+local githubBase = "https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/"
+
+-- Updated function with debug print statements
+local function runGitScript(fileName)
+    local url = githubBase .. fileName
+    print("🛠 Fetching from:", url)
+
+    local ok, response = pcall(function()
+        return syn and syn.request({
+            Url = url,
+            Method = "GET"
+        })
+    end)
+
+    if not ok then
+        warn("❌ request() error:", response)
+        return
+    end
+
+    if response and response.Success then
+        print("✅ Fetched", fileName, "(", #response.Body, "bytes )")
+        local success, result = pcall(loadstring(response.Body))
+        if success then
+            print("✅ Executed:", fileName)
+        else
+            warn("❌ Script Error in", fileName, ":", result)
+        end
+    else
+        warn("❌ Failed to fetch", fileName)
+        if response then
+            warn("HTTP Status Code:", response.StatusCode or "unknown")
+        end
+    end
+end
+
+-- Button Generator
+local function createButton(icon, label, yPos, fileName)
     local Button = Instance.new("TextButton")
+    local Icon = Instance.new("ImageLabel")
+    local Label = Instance.new("TextLabel")
+    local Corner = Instance.new("UICorner")
+
     Button.Parent = Frame
-    Button.Size = UDim2.new(0, 260, 0, 40)
+    Button.Size = UDim2.new(0, 300, 0, 50)
     Button.Position = UDim2.new(0, 20, 0, yPos)
-    Button.Text = text
-    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Button.BackgroundColor3 = Color3.fromRGB(60, 120, 180)
-    Button.TextSize = 16
+    Button.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
+    Button.BorderSizePixel = 0
+    Button.Text = ""
+    
+    Corner.Parent = Button
+
+    Icon.Name = "Icon"
+    Icon.Parent = Button
+    Icon.BackgroundTransparency = 1
+    Icon.Position = UDim2.new(0, 10, 0, 10)
+    Icon.Size = UDim2.new(0, 30, 0, 30)
+    Icon.Image = icon
+
+    Label.Name = "Label"
+    Label.Parent = Button
+    Label.BackgroundTransparency = 1
+    Label.Position = UDim2.new(0, 50, 0, 10)
+    Label.Size = UDim2.new(1, -60, 0, 30)
+    Label.Font = Enum.Font.Gotham
+    Label.TextColor3 = Color3.fromRGB(230, 230, 230)
+    Label.TextSize = 16
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+    Label.Text = label .. " (" .. fileName .. ")"
 
     Button.MouseButton1Click:Connect(function()
-        if isfile(fileName) then
-            local content = readfile(fileName)
-            local success, result = pcall(loadstring(content))
-            if success then
-                print("Executed: " .. fileName)
-            else
-                warn("Execution failed: " .. result)
-            end
-        else
-            warn("File not found: " .. fileName)
-        end
+        runGitScript(fileName)
     end)
 end
 
--- Create the buttons
-createButton("🐾 Duplicate Pets", 20, "duplicate_pets.lua")
-createButton("🐶 Pet Spawner", 70, "pet_spawner.lua")
-createButton("💰 Trade Scam", 120, "trade_scam.lua")
+-- Create buttons for each script
+createButton("rbxassetid://6034328871", "Duplicate Pets", 20, "duplicate_pets.lua")
+createButton("rbxassetid://6035067836", "Pet Spawner", 80, "pet_spawner.lua")
+createButton("rbxassetid://6031075938", "Trade Scam", 140, "trade_scam.lua")
