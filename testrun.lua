@@ -1,4 +1,4 @@
--- Setup
+-- GUI Setup
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local UICorner = Instance.new("UICorner")
@@ -15,8 +15,47 @@ Frame.Draggable = true
 
 UICorner.Parent = Frame
 
--- GitHub base URL
+-- GitHub raw base URL
 local githubBase = "https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/"
+
+-- In-game message function
+local function showMessage(text)
+    local msg = Instance.new("Message", game.CoreGui)
+    msg.Text = text
+    task.delay(3, function() msg:Destroy() end)
+end
+
+-- Updated function with in-game messages
+local function runGitScript(fileName)
+    local url = githubBase .. fileName
+    showMessage("📡 Fetching: " .. fileName)
+
+    local ok, response = pcall(function()
+        return syn and syn.request({
+            Url = url,
+            Method = "GET"
+        }) or http and http.request and http.request({
+            Url = url,
+            Method = "GET"
+        })
+    end)
+
+    if not ok or not response then
+        showMessage("❌ Failed to send HTTP request.")
+        return
+    end
+
+    if response.Success then
+        local success, result = pcall(loadstring(response.Body))
+        if success then
+            showMessage("✅ Executed: " .. fileName)
+        else
+            showMessage("❌ Script error in: " .. fileName)
+        end
+    else
+        showMessage("❌ Failed to fetch: " .. fileName)
+    end
+end
 
 -- Button Generator
 local function createButton(icon, label, yPos, fileName)
@@ -53,27 +92,11 @@ local function createButton(icon, label, yPos, fileName)
     Label.Text = label .. " (" .. fileName .. ")"
 
     Button.MouseButton1Click:Connect(function()
-        local url = githubBase .. fileName
-        local response = syn and syn.request and syn.request({
-            Url = url,
-            Method = "GET"
-        })
-
-        if response and response.Success then
-            local content = response.Body
-            local success, result = pcall(loadstring(content))
-            if success then
-                print("✅ Loaded: " .. fileName)
-            else
-                warn("❌ Script Error: " .. result)
-            end
-        else
-            warn("❌ Could not fetch: " .. fileName)
-        end
+        runGitScript(fileName)
     end)
 end
 
--- Create buttons
+-- Create buttons for each script
 createButton("rbxassetid://6034328871", "Duplicate Pets", 20, "duplicate_pets.lua")
 createButton("rbxassetid://6035067836", "Pet Spawner", 80, "pet_spawner.lua")
 createButton("rbxassetid://6031075938", "Trade Scam", 140, "trade_scam.lua")
