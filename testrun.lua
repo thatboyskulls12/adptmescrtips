@@ -67,11 +67,22 @@ local function runDuplicatePets()
 	end
 end
 
--- Placeholders for other buttons
+-- ✅ Fully working Pet Spawner button
 local function runPetSpawner()
-	showMessage("🐶 Pet Spawner placeholder")
+	showMessage("🔄 Loading Pet Spawner...")
+
+	local success, err = pcall(function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/pet_spawner.lua"))()
+	end)
+
+	if success then
+		showMessage("✅ Pet Spawner Loaded!")
+	else
+		showMessage("❌ Failed to load Pet Spawner: " .. err)
+	end
 end
 
+-- Placeholder
 local function runTradeScam()
 	showMessage("💰 Trade Scam placeholder")
 end
