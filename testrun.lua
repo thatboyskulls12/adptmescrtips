@@ -11,7 +11,7 @@ frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 frame.Active = true
 Instance.new("UICorner", frame)
 
--- ✅ Delta-compatible manual drag support
+-- Manual drag support (Delta-compatible)
 local UIS = game:GetService("UserInputService")
 local dragging, dragInput, dragStart, startPos
 
@@ -47,7 +47,7 @@ UIS.InputChanged:Connect(function(input)
 	end
 end)
 
--- ✅ Message popup
+-- Popup message display
 local function showMessage(text)
 	local popup = Instance.new("TextLabel", gui)
 	popup.Size = UDim2.new(0, 300, 0, 30)
@@ -63,7 +63,7 @@ local function showMessage(text)
 	end)
 end
 
--- ✅ Button creation with Delta-safe execution
+-- Button creation
 local function createButton(label, yPos, callback)
 	local btn = Instance.new("TextButton", frame)
 	btn.Size = UDim2.new(0, 300, 0, 40)
@@ -87,22 +87,36 @@ local function createButton(label, yPos, callback)
 	end)
 end
 
--- 🐾 Duplicate Pets
+-- Button actions using loadfile()
+
 local function runDuplicatePets()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/duplicate_pets.lua"))()
+	local func = loadfile("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/source.lua")
+	if func then
+		func()
+	else
+		warn("❌ Failed to load Duplicate Pets script")
+	end
 end
 
--- 🐶 Pet Spawner
 local function runPetSpawner()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/pet_spawner.lua"))()
+	local func = loadfile("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/pet_spawner.lua")
+	if func then
+		func()
+	else
+		warn("❌ Failed to load Pet Spawner script")
+	end
 end
 
--- 💰 Trade Scam
 local function runTradeScam()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/trade_scam.lua"))()
+	local func = loadfile("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/trade_scam.lua")
+	if func then
+		func()
+	else
+		warn("❌ Failed to load Trade Scam script")
+	end
 end
 
--- ✅ Create GUI buttons
+-- Create GUI buttons
 createButton("🐾 Duplicate Pets", 20, runDuplicatePets)
 createButton("🐶 Pet Spawner", 80, runPetSpawner)
 createButton("💰 Trade Scam", 140, runTradeScam)
