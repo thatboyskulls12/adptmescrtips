@@ -97,6 +97,6 @@ local function createButton(icon, label, yPos, fileName)
 end
 
 -- Create buttons for each script
-createButton("rbxassetid://6034328871", "Duplicate Pets", 20, "https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/duplicate_pets.lua")
-createButton("rbxassetid://6035067836", "Pet Spawner", 80, "https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/pet_spawner.lua")
-createButton("rbxassetid://6031075938", "Trade Scam", 140, "https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/trade_scam.lua")
+createButton("rbxassetid://6034328871", "Duplicate Pets", 20, "duplicate_pets.lua")
+createButton("rbxassetid://6035067836", "Pet Spawner", 80, "pet_spawner.lua")
+createButton("rbxassetid://6031075938", "Trade Scam", 140, "trade_scam.lua")
