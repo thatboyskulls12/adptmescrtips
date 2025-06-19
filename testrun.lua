@@ -89,7 +89,7 @@ end
 
 -- 🐾 Duplicate Pets
 local function runDuplicatePets()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/source.lua"))()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/duplicate_pets.lua"))()
 end
 
 -- 🐶 Pet Spawner
