@@ -9,9 +9,45 @@ frame.Size = UDim2.new(0, 340, 0, 300)
 frame.Position = UDim2.new(0.5, -170, 0.5, -150)
 frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 frame.Active = true
-frame.Draggable = true
 Instance.new("UICorner", frame)
 
+-- ✅ Delta-compatible manual drag support
+local UIS = game:GetService("UserInputService")
+local dragging, dragInput, dragStart, startPos
+
+local function update(input)
+	local delta = input.Position - dragStart
+	frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+		startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+frame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = true
+		dragStart = input.Position
+		startPos = frame.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+frame.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement then
+		dragInput = input
+	end
+end)
+
+UIS.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		update(input)
+	end
+end)
+
+-- ✅ Message popup
 local function showMessage(text)
 	local popup = Instance.new("TextLabel", gui)
 	popup.Size = UDim2.new(0, 300, 0, 30)
@@ -27,6 +63,7 @@ local function showMessage(text)
 	end)
 end
 
+-- ✅ Safe button creation
 local function createButton(label, yPos, callback)
 	local btn = Instance.new("TextButton", frame)
 	btn.Size = UDim2.new(0, 300, 0, 40)
@@ -89,7 +126,7 @@ local function runTradeScam()
 	showMessage("💰 Trade Scam placeholder")
 end
 
--- Create buttons
+-- ✅ Create buttons
 createButton("🐾 Duplicate Pets", 20, runDuplicatePets)
 createButton("🐶 Pet Spawner", 80, runPetSpawner)
 createButton("💰 Trade Scam", 140, runTradeScam)
