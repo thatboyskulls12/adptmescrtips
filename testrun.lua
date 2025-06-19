@@ -1,73 +1,43 @@
--- Get PlayerGui for Delta compatibility
+-- Parent GUI to PlayerGui (not CoreGui) for Delta compatibility
 local player = game:GetService("Players").LocalPlayer
-local guiParent = player:WaitForChild("PlayerGui")
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "DeltaGithubLoader"
 
--- Create GUI
-local ScreenGui = Instance.new("ScreenGui", guiParent)
-ScreenGui.Name = "DeltaFinalGUI"
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 340, 0, 240)
+frame.Position = UDim2.new(0.5, -170, 0.5, -120)
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+frame.Active = true
+frame.Draggable = true
+Instance.new("UICorner", frame)
 
-local Frame = Instance.new("Frame", ScreenGui)
-Frame.Size = UDim2.new(0, 340, 0, 240)
-Frame.Position = UDim2.new(0.5, -170, 0.5, -120)
-Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-Frame.Active = true
-Frame.Draggable = true
+-- Button function
+local function createButton(label, yPos, fileURL)
+    local btn = Instance.new("TextButton", frame)
+    btn.Size = UDim2.new(0, 300, 0, 40)
+    btn.Position = UDim2.new(0, 20, 0, yPos)
+    btn.BackgroundColor3 = Color3.fromRGB(60, 120, 180)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 14
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Text = label
 
-local UICorner = Instance.new("UICorner", Frame)
+    Instance.new("UICorner", btn)
 
--- Popup message function
-local function showMessage(text)
-    local popup = Instance.new("TextLabel", ScreenGui)
-    popup.Size = UDim2.new(0, 300, 0, 30)
-    popup.Position = UDim2.new(0.5, -150, 0, 0)
-    popup.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-    popup.TextColor3 = Color3.fromRGB(255, 255, 255)
-    popup.Text = text
-    popup.Font = Enum.Font.SourceSansBold
-    popup.TextSize = 18
-    popup.BackgroundTransparency = 0.1
+    btn.MouseButton1Click:Connect(function()
+        local success, result = pcall(function()
+            return loadstring(game:HttpGet(fileURL))()
+        end)
 
-    task.delay(3, function()
-        popup:Destroy()
+        if success then
+            print("✅ Executed:", label)
+        else
+            warn("❌ Error in", label, result)
+        end
     end)
 end
 
--- Run script from GitHub
-local function runGitHubScript(file)
-    local url = "https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/" .. file
-    showMessage("📡 Loading: " .. file)
-
-    local success, result = pcall(function()
-        return loadstring(game:HttpGet(url))()
-    end)
-
-    if success then
-        showMessage("✅ Script executed!")
-    else
-        showMessage("❌ Script failed!")
-    end
-end
-
--- Button creator
-local function createButton(label, yPos, fileName)
-    local Button = Instance.new("TextButton", Frame)
-    Button.Size = UDim2.new(0, 300, 0, 40)
-    Button.Position = UDim2.new(0, 20, 0, yPos)
-    Button.BackgroundColor3 = Color3.fromRGB(60, 120, 180)
-    Button.Text = label .. " (" .. fileName .. ")"
-    Button.Font = Enum.Font.Gotham
-    Button.TextSize = 14
-    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-
-    local Corner = Instance.new("UICorner", Button)
-
-    Button.MouseButton1Click:Connect(function()
-        runGitHubScript(fileName)
-    end)
-end
-
--- Add buttons
-createButton("🐾 Duplicate Pets", 20, "duplicate_pets.lua")
-createButton("🐶 Pet Spawner", 70, "pet_spawner.lua")
-createButton("💰 Trade Scam", 120, "trade_scam.lua")
-createButton("🧪 Test Script", 170, "test.lua")
+-- Replace with your real GitHub raw file links
+createButton("🐾 Duplicate Pets", 20, "https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/duplicate_pets.lua")
+createButton("🐶 Pet Spawner", 70, "https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/pet_spawner.lua")
+createButton("💰 Trade Scam", 120, "https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/trade_scam.lua")
