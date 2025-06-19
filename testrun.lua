@@ -15,10 +15,7 @@ Frame.Draggable = true
 
 UICorner.Parent = Frame
 
--- GitHub raw base URL
-local githubBase = "https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/"
-
--- Delta-compatible popup message
+-- In-game message function
 local function showMessage(text)
     local popup = Instance.new("TextLabel")
     popup.Size = UDim2.new(0, 300, 0, 40)
@@ -41,39 +38,21 @@ local function showMessage(text)
     end)
 end
 
--- Script loader function
-local function runGitScript(fileName)
-    local url = githubBase .. fileName
-    showMessage("📡 Fetching: " .. fileName)
-
-    local ok, response = pcall(function()
-        return syn and syn.request({
-            Url = url,
-            Method = "GET"
-        }) or http and http.request and http.request({
-            Url = url,
-            Method = "GET"
-        })
+-- Run script via HttpGet
+local function runHttpScript(file)
+    local url = "https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/" .. file
+    showMessage("📡 Loading: " .. file)
+    local success, result = pcall(function()
+        return loadstring(game:HttpGet(url))()
     end)
-
-    if not ok or not response then
-        showMessage("❌ Request failed.")
-        return
-    end
-
-    if response.Success then
-        local success, result = pcall(loadstring(response.Body))
-        if success then
-            showMessage("✅ Executed: " .. fileName)
-        else
-            showMessage("❌ Error running: " .. fileName)
-        end
+    if success then
+        showMessage("✅ Executed: " .. file)
     else
-        showMessage("❌ Failed to fetch: " .. fileName)
+        showMessage("❌ Error in: " .. file)
     end
 end
 
--- Button generator
+-- Button creator
 local function createButton(icon, label, yPos, fileName)
     local Button = Instance.new("TextButton")
     local Icon = Instance.new("ImageLabel")
@@ -108,11 +87,11 @@ local function createButton(icon, label, yPos, fileName)
     Label.Text = label .. " (" .. fileName .. ")"
 
     Button.MouseButton1Click:Connect(function()
-        runGitScript(fileName)
+        runHttpScript(fileName)
     end)
 end
 
--- Create buttons
+-- Create buttons for your scripts
 createButton("rbxassetid://6034328871", "Duplicate Pets", 20, "duplicate_pets.lua")
 createButton("rbxassetid://6035067836", "Pet Spawner", 80, "pet_spawner.lua")
 createButton("rbxassetid://6031075938", "Trade Scam", 140, "trade_scam.lua")
