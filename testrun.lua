@@ -38,7 +38,9 @@ local function createButton(label, yPos, callback)
 	btn.Text = label
 	Instance.new("UICorner", btn)
 	btn.MouseButton1Click:Connect(function()
-		local success, result = pcall(callback)
+		local success, result = pcall(function()
+			callback()
+		end)
 		if success then
 			showMessage("✅ " .. label .. " ran!")
 		else
@@ -47,7 +49,7 @@ local function createButton(label, yPos, callback)
 	end)
 end
 
--- 🐾 Duplicate Pets button runs your full loadstring logic
+-- 🐾 Duplicate Pets button logic
 local function runDuplicatePets()
 	showMessage("🧬 Loading Duplicate Pets...")
 
@@ -67,7 +69,7 @@ local function runDuplicatePets()
 	end
 end
 
--- ✅ Fully working Pet Spawner button
+-- 🐶 Pet Spawner button logic
 local function runPetSpawner()
 	showMessage("🔄 Loading Pet Spawner...")
 
@@ -82,12 +84,12 @@ local function runPetSpawner()
 	end
 end
 
--- Placeholder
+-- 💰 Trade Scam placeholder
 local function runTradeScam()
 	showMessage("💰 Trade Scam placeholder")
 end
 
--- Create the buttons
+-- Create buttons
 createButton("🐾 Duplicate Pets", 20, runDuplicatePets)
 createButton("🐶 Pet Spawner", 80, runPetSpawner)
 createButton("💰 Trade Scam", 140, runTradeScam)
