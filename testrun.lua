@@ -1,7 +1,13 @@
--- Delta-safe GUI with working buttons
-local player = game:GetService("Players").LocalPlayer
-local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "DeltaFinalButtonGUI"
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Wait for PlayerGui to be ready
+repeat task.wait() until player:FindFirstChild("PlayerGui")
+local guiParent = player:WaitForChild("PlayerGui")
+
+-- Setup ScreenGui
+local gui = Instance.new("ScreenGui", guiParent)
+gui.Name = "DeltaRealGUI"
 
 local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.new(0, 340, 0, 300)
@@ -11,7 +17,7 @@ frame.Active = true
 frame.Draggable = true
 Instance.new("UICorner", frame)
 
--- Show popup
+-- Popup function
 local function showMessage(text)
 	local popup = Instance.new("TextLabel", gui)
 	popup.Size = UDim2.new(0, 300, 0, 30)
@@ -22,13 +28,12 @@ local function showMessage(text)
 	popup.Font = Enum.Font.SourceSansBold
 	popup.TextSize = 18
 	popup.BackgroundTransparency = 0.1
-
 	task.delay(3, function()
 		popup:Destroy()
 	end)
 end
 
--- Button creator
+-- Button creation
 local function createButton(label, yPos, callback)
 	local btn = Instance.new("TextButton", frame)
 	btn.Size = UDim2.new(0, 300, 0, 40)
@@ -39,7 +44,6 @@ local function createButton(label, yPos, callback)
 	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
 	btn.Text = label
 	Instance.new("UICorner", btn)
-
 	btn.MouseButton1Click:Connect(function()
 		local success, result = pcall(callback)
 		if success then
@@ -50,23 +54,23 @@ local function createButton(label, yPos, callback)
 	end)
 end
 
--- Actual script actions (fake demos you can replace)
-local function duplicatePets()
-	print("🐾 Simulating pet duplication")
-	-- Insert real logic here
+-- Replace these with actual logic
+local function runDuplicatePets()
+	print("🐾 Running duplicate pets script...")
+	-- Add real code here
 end
 
-local function spawnPet()
-	print("🐶 Simulating pet spawn")
-	-- Insert real logic here
+local function runPetSpawner()
+	print("🐶 Running pet spawner script...")
+	-- Add real code here
 end
 
-local function scamTrade()
-	print("💰 Simulating fake trade offer")
-	-- Insert real logic here
+local function runTradeScam()
+	print("💰 Running trade scam script...")
+	-- Add real code here
 end
 
 -- Create the buttons
-createButton("🐾 Duplicate Pets", 20, duplicatePets)
-createButton("🐶 Pet Spawner", 80, spawnPet)
-createButton("💰 Trade Scam", 140, scamTrade)
+createButton("🐾 Duplicate Pets", 20, runDuplicatePets)
+createButton("🐶 Pet Spawner", 80, runPetSpawner)
+createButton("💰 Trade Scam", 140, runTradeScam)
