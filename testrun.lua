@@ -18,14 +18,30 @@ UICorner.Parent = Frame
 -- GitHub raw base URL
 local githubBase = "https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/"
 
--- In-game message function
+-- Delta-compatible popup message
 local function showMessage(text)
-    local msg = Instance.new("Message", game.CoreGui)
-    msg.Text = text
-    task.delay(3, function() msg:Destroy() end)
+    local popup = Instance.new("TextLabel")
+    popup.Size = UDim2.new(0, 300, 0, 40)
+    popup.Position = UDim2.new(0.5, -150, 0.1, 0)
+    popup.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    popup.TextColor3 = Color3.fromRGB(255, 255, 255)
+    popup.Font = Enum.Font.GothamBold
+    popup.TextSize = 16
+    popup.Text = text
+    popup.BackgroundTransparency = 0.2
+    popup.BorderSizePixel = 0
+    popup.Parent = game:GetService("CoreGui")
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = popup
+
+    task.delay(3, function()
+        popup:Destroy()
+    end)
 end
 
--- Updated function with in-game messages
+-- Script loader function
 local function runGitScript(fileName)
     local url = githubBase .. fileName
     showMessage("📡 Fetching: " .. fileName)
@@ -41,7 +57,7 @@ local function runGitScript(fileName)
     end)
 
     if not ok or not response then
-        showMessage("❌ Failed to send HTTP request.")
+        showMessage("❌ Request failed.")
         return
     end
 
@@ -50,14 +66,14 @@ local function runGitScript(fileName)
         if success then
             showMessage("✅ Executed: " .. fileName)
         else
-            showMessage("❌ Script error in: " .. fileName)
+            showMessage("❌ Error running: " .. fileName)
         end
     else
         showMessage("❌ Failed to fetch: " .. fileName)
     end
 end
 
--- Button Generator
+-- Button generator
 local function createButton(icon, label, yPos, fileName)
     local Button = Instance.new("TextButton")
     local Icon = Instance.new("ImageLabel")
@@ -96,7 +112,7 @@ local function createButton(icon, label, yPos, fileName)
     end)
 end
 
--- Create buttons for each script
+-- Create buttons
 createButton("rbxassetid://6034328871", "Duplicate Pets", 20, "duplicate_pets.lua")
 createButton("rbxassetid://6035067836", "Pet Spawner", 80, "pet_spawner.lua")
 createButton("rbxassetid://6031075938", "Trade Scam", 140, "trade_scam.lua")
