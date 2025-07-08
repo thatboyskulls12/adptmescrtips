@@ -65,12 +65,15 @@ local script3 = [[
 createButton("Pet Spawner", 110, [[
     loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/pet_spawners.lua"))()
 ]])
+
 createButton("Trade Scam glitch", 110, [[
     loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/trade_scam.lua"))()
 ]])
+
 createButton("Auto Grinder", 110, [[
     loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/Auto_grinder.lua"))()
 ]])
+
 createButton("House duplicator", 110, [[
     loadstring(game:HttpGet("https://raw.githubusercontent.com/thatboyskulls12/adptmescrtips/refs/heads/main/Auto_grinder.lua"))()
 ]])
